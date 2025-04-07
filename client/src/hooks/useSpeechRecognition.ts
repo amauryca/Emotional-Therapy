@@ -3,7 +3,7 @@ import { SpeechRecognitionResult, SpeechToTextResult } from '@/types';
 import { detectVocalTone, simulateVocalToneDetection } from '@/lib/ai';
 
 interface UseSpeechRecognitionProps {
-  onFinalTranscript?: (result: SpeechToTextResult, vocalTone?: string) => void;
+  onFinalTranscript?: (result: SpeechToTextResult, vocalTone?: string, toneConfidence?: number) => void;
   autoRestart?: boolean;
   pauseThreshold?: number; // in milliseconds, time to wait for pause before considering speech final
 }
@@ -120,13 +120,21 @@ export function useSpeechRecognition({
   const processFinalTranscript = useCallback((text: string, confidence: number) => {
     if (!text.trim()) return;
     
+    // Pre-process the text for better readability
+    const processedText = text
+      .trim()
+      .replace(/(\s{2,})/g, ' ') // Remove extra spaces
+      .replace(/^\s*i\s+/i, 'I ') // Capitalize 'i' at the beginning
+      .replace(/(\.\s+|^)([a-z])/g, (match, p1, p2) => p1 + p2.toUpperCase()); // Capitalize first letter after period
+    
     // Analyze vocal tone from the text
-    const vocalToneResult = detectVocalTone(text);
+    const vocalToneResult = detectVocalTone(processedText);
     
     if (onFinalTranscript) {
       onFinalTranscript(
-        { text: text.trim(), confidence }, 
-        vocalToneResult.tone
+        { text: processedText, confidence }, 
+        vocalToneResult.tone,
+        vocalToneResult.confidence
       );
     }
     

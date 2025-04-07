@@ -81,10 +81,15 @@ export function usePuterAI({
       conversationContextRef.current.userMood.vocalTone = vocalTone;
     }
     
+    // Process the message for better display - ensure first word is capitalized
+    const processedMessage = messageText.trim()
+      .replace(/^([a-z])/, match => match.toUpperCase())
+      .replace(/\s{2,}/g, ' '); // Remove multiple spaces
+    
     // Add user message to chat
     const userMessage: TherapyMessage = {
       id: uuidv4(),
-      content: messageText,
+      content: processedMessage,
       role: 'user',
       timestamp: new Date(),
       mood: {
@@ -156,7 +161,14 @@ export function usePuterAI({
         id: uuidv4(),
         content: processedContent,
         role: 'assistant',
-        timestamp: new Date()
+        timestamp: new Date(),
+        // Respond to the user's emotion for better responsiveness
+        mood: {
+          emotion: facialEmotion ? 
+            (facialEmotion === 'happy' ? 'happy' : 
+             facialEmotion === 'sad' ? 'neutral' : 
+             facialEmotion === 'angry' ? 'calm' : 'neutral') as any : undefined
+        }
       };
       
       setMessages(prev => [...prev, aiMessage]);

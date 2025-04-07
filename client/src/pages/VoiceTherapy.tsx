@@ -47,8 +47,8 @@ export default function VoiceTherapy() {
     stopListening,
     error: speechError
   } = useSpeechRecognition({
-    onFinalTranscript: (result, vocalTone) => {
-      handleSpeech(result, vocalTone);
+    onFinalTranscript: (result, vocalTone, toneConfidence) => {
+      handleSpeech(result, vocalTone, toneConfidence);
     },
     autoRestart: true,
     pauseThreshold: 1500 // 1.5 seconds of silence to consider speech final
