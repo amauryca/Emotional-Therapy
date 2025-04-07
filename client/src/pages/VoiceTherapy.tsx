@@ -3,10 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CameraView } from '@/components/voice-therapy/CameraView';
 import { EmotionPanel } from '@/components/voice-therapy/EmotionPanel';
-import { EmotionVisualizer } from '@/components/voice-therapy/EmotionVisualizer';
 import VoiceTranscription from '@/components/voice-therapy/VoiceTranscription';
 import AmbientSoundPlayer from '@/components/voice-therapy/AmbientSoundPlayer';
 import InstructionsCard from '@/components/voice-therapy/InstructionsCard';
@@ -44,7 +42,6 @@ export default function VoiceTherapy() {
   // Success notification state
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
-  
   
   // Speech recognition setup
   const { 
@@ -166,10 +163,6 @@ export default function VoiceTherapy() {
       transition: { type: "spring", stiffness: 300, damping: 24 }
     }
   };
-  
-  // Get icon for current emotion and vocal tone
-  const getEmotionIcon = () => EMOTION_ICONS[currentEmotion] || '😐';
-  const getVocalToneIcon = () => currentVocalTone ? (VOCAL_TONE_ICONS[currentVocalTone] || '🗣️') : '🗣️';
 
   return (
     <motion.div 
@@ -185,6 +178,7 @@ export default function VoiceTherapy() {
         duration={3000}
         withConfetti={true}
       />
+      
       {/* Model Status Indicators */}
       <motion.div 
         className="flex justify-center mb-4 gap-2"
@@ -211,112 +205,29 @@ export default function VoiceTherapy() {
       </motion.div>
       
       <motion.div variants={itemVariants}>
-        <Card className="bg-blue-50 border-blue-100 shadow-md mb-6 overflow-hidden relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-100/30 to-green-100/20 animate-shimmer"></div>
-          
-          <CardHeader className="flex flex-row items-center justify-between pb-2 relative z-10">
-            <motion.div 
-              className="flex items-center gap-2"
-              initial={{ x: -20, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ delay: 0.3, type: "spring" }}
-            >
-              <motion.div 
-                className="text-blue-600 text-2xl animate-float"
-                animate={{ scale: [1, 1.05, 1] }}
-                transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
-              >
-                🎙️
-              </motion.div>
-              <CardTitle className="text-blue-700">AI Voice Therapist</CardTitle>
-            </motion.div>
+        <Card className="bg-white border-gray-200 shadow-sm mb-6 overflow-hidden">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <div className="flex items-center gap-2">
+              <CardTitle className="text-gray-800">Voice Chat</CardTitle>
+            </div>
             
-            {/* Age Group Selector with animation */}
-            <motion.div
-              initial={{ x: 20, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ delay: 0.4, type: "spring" }}
-            >
-              <AgeGroupSelector
-                currentAgeGroup={ageGroup}
-                onAgeGroupChange={handleAgeGroupChange}
-                className="w-40"
-              />
-            </motion.div>
+            {/* Age Group Selector */}
+            <AgeGroupSelector
+              currentAgeGroup={ageGroup}
+              onAgeGroupChange={handleAgeGroupChange}
+              className="w-40"
+            />
           </CardHeader>
           
-          <CardContent className="relative z-10">
-            <motion.div 
-              className="mb-4"
-              initial={{ y: 10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.5 }}
-            >
-              <p className="text-blue-700">
-                This therapy session uses your camera and microphone for a personalized experience.
-                The AI adapts responses based on your facial expressions and vocal tone detected from the indicators below.
+          <CardContent>
+            <div className="mb-4">
+              <p className="text-gray-600 text-sm">
+                This chat uses your camera and microphone for communication.
               </p>
-            </motion.div>
-            
-            {/* Emotion and Vocal Tone Indicators */}
-            <motion.div 
-              className="flex flex-wrap gap-3 mb-4"
-              initial={{ y: 10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.6 }}
-            >
-              <motion.div 
-                className="flex items-center gap-1.5 bg-blue-100 rounded-full px-3 py-1.5"
-                whileHover={{ scale: 1.05 }}
-              >
-                <span className="text-blue-800 font-medium">Facial Emotion:</span>
-                <span className="flex items-center gap-1">
-                  <motion.span 
-                    className="text-lg animate-pulse"
-                    animate={{ 
-                      scale: [1, 1.1, 1],
-                      opacity: [0.8, 1, 0.8]
-                    }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  >
-                    {getEmotionIcon()}
-                  </motion.span>
-                  <span className="capitalize text-blue-900">{currentEmotion}</span>
-                  <span className="text-xs text-blue-500">({Math.round(emotionConfidence * 100)}%)</span>
-                </span>
-              </motion.div>
-              
-              {currentVocalTone && (
-                <motion.div 
-                  className="flex items-center gap-1.5 bg-green-100 rounded-full px-3 py-1.5"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  whileHover={{ scale: 1.05 }}
-                >
-                  <span className="text-green-800 font-medium">Vocal Tone:</span>
-                  <span className="flex items-center gap-1">
-                    <motion.span 
-                      className="text-lg animate-pulse"
-                      animate={{ 
-                        scale: [1, 1.1, 1],
-                        opacity: [0.8, 1, 0.8]
-                      }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    >
-                      {getVocalToneIcon()}
-                    </motion.span>
-                    <span className="capitalize text-green-900">{currentVocalTone}</span>
-                    <span className="text-xs text-green-500">({Math.round(vocalToneConfidence * 100)}%)</span>
-                  </span>
-                </motion.div>
-              )}
-            </motion.div>
+            </div>
             
             {/* Controls bar */}
-            <motion.div 
-              className="flex justify-between items-center mb-4"
-              variants={itemVariants}
-            >
+            <div className="flex justify-between items-center mb-4">
               <div className="flex items-center gap-3">
                 <Button 
                   onClick={toggleVoiceRecognition}
@@ -338,53 +249,47 @@ export default function VoiceTherapy() {
               
               {/* Ambient Sound Player */}
               <AmbientSoundPlayer />
-            </motion.div>
+            </div>
             
             {/* Side-by-side layout for medium screens and above */}
             <div className="flex flex-col md:flex-row gap-4">
               {/* Left side - Camera and emotion */}
               <div className="w-full md:w-1/2 flex flex-col gap-3">
                 {/* Camera View */}
-                <motion.div variants={itemVariants}>
-                  <CameraView 
-                    isEnabled={cameraEnabled}
-                    onEmotionDetected={(result) => {
-                      handleEmotionChange(result.emotion, result.confidence);
-                    }} 
-                    className="w-full h-[250px] md:h-[300px]"
-                  />
-                </motion.div>
+                <CameraView 
+                  isEnabled={cameraEnabled}
+                  onEmotionDetected={(result) => {
+                    handleEmotionChange(result.emotion, result.confidence);
+                  }} 
+                  className="w-full h-[250px] md:h-[300px]"
+                />
                 
                 {/* Emotion Panel */}
-                <motion.div variants={itemVariants}>
-                  <EmotionPanel 
-                    currentEmotion={currentEmotion} 
-                    confidenceLevel={emotionConfidence}
-                    compact={true}
-                  />
-                </motion.div>
+                <EmotionPanel 
+                  currentEmotion={currentEmotion} 
+                  confidenceLevel={emotionConfidence}
+                  compact={true}
+                />
               </div>
               
               {/* Right side - Chat */}
-              <motion.div variants={itemVariants} className="w-full md:w-1/2">
+              <div className="w-full md:w-1/2">
                 <VoiceTranscription messages={messages} />
-              </motion.div>
+              </div>
             </div>
             
             {/* Processing indicator with animation */}
             <AnimatePresence>
               {isProcessing && (
                 <motion.div 
-                  className="mt-3 text-sm text-blue-500 italic bg-blue-50 p-2 rounded-md border border-blue-100"
+                  className="mt-3 text-sm text-gray-500 italic bg-gray-50 p-2 rounded-md border border-gray-200"
                   initial={{ opacity: 0, y: 5 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -5 }}
                   transition={{ duration: 0.3 }}
                 >
                   <span className="inline-block mr-2 animate-spin">⏳</span>
-                  The AI is analyzing your <span className="font-medium text-blue-700">{currentEmotion}</span> facial expression 
-                  {currentVocalTone && <> and <span className="font-medium text-green-700">{currentVocalTone}</span> vocal tone</>} 
-                  to provide a more personalized response...
+                  Processing your message...
                 </motion.div>
               )}
             </AnimatePresence>
