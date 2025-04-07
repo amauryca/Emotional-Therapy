@@ -312,65 +312,61 @@ export default function VoiceTherapy() {
               )}
             </motion.div>
             
-            {/* Main two column layout - camera and chat */}
-            <div className="flex flex-col gap-6">
-              {/* Camera and emotion detection */}
-              <motion.div 
-                className="flex justify-between items-center mb-2"
-                variants={itemVariants}
-              >
-                <div className="flex items-center gap-3">
-                  <Button 
-                    onClick={toggleVoiceRecognition}
-                    variant={voiceEnabled ? "default" : "outline"}
-                    className="flex items-center gap-2"
-                  >
-                    {voiceEnabled ? '🎙️ Voice Active' : '🎙️ Enable Voice'}
-                  </Button>
-                  
-                  <Button 
-                    onClick={() => setCameraEnabled(!cameraEnabled)}
-                    variant={cameraEnabled ? "default" : "outline"}
-                    size="sm"
-                  >
-                    {cameraEnabled ? 'Camera On' : 'Camera Off'}
-                  </Button>
-                </div>
+            {/* Controls bar */}
+            <motion.div 
+              className="flex justify-between items-center mb-4"
+              variants={itemVariants}
+            >
+              <div className="flex items-center gap-3">
+                <Button 
+                  onClick={toggleVoiceRecognition}
+                  variant={voiceEnabled ? "default" : "outline"}
+                  className="flex items-center gap-2"
+                  size="sm"
+                >
+                  {voiceEnabled ? '🎙️ Voice Active' : '🎙️ Enable Voice'}
+                </Button>
                 
-                {/* Ambient Sound Player */}
-                <AmbientSoundPlayer />
-              </motion.div>
+                <Button 
+                  onClick={() => setCameraEnabled(!cameraEnabled)}
+                  variant={cameraEnabled ? "default" : "outline"}
+                  size="sm"
+                >
+                  {cameraEnabled ? 'Camera On' : 'Camera Off'}
+                </Button>
+              </div>
               
-              {/* Camera View */}
-              <motion.div
-                variants={itemVariants}
-              >
-                <CameraView 
-                  isEnabled={cameraEnabled}
-                  onEmotionDetected={(result) => {
-                    handleEmotionChange(result.emotion, result.confidence);
-                  }} 
-                  className="w-full h-[300px] md:h-[350px]"
-                />
-              </motion.div>
+              {/* Ambient Sound Player */}
+              <AmbientSoundPlayer />
+            </motion.div>
+            
+            {/* Side-by-side layout for medium screens and above */}
+            <div className="flex flex-col md:flex-row gap-4">
+              {/* Left side - Camera and emotion */}
+              <div className="w-full md:w-1/2 flex flex-col gap-3">
+                {/* Camera View */}
+                <motion.div variants={itemVariants}>
+                  <CameraView 
+                    isEnabled={cameraEnabled}
+                    onEmotionDetected={(result) => {
+                      handleEmotionChange(result.emotion, result.confidence);
+                    }} 
+                    className="w-full h-[250px] md:h-[300px]"
+                  />
+                </motion.div>
+                
+                {/* Emotion Panel */}
+                <motion.div variants={itemVariants}>
+                  <EmotionPanel 
+                    currentEmotion={currentEmotion} 
+                    confidenceLevel={emotionConfidence}
+                    compact={true}
+                  />
+                </motion.div>
+              </div>
               
-              {/* Emotion Panel */}
-              <motion.div
-                variants={itemVariants}
-                className="mb-2"
-              >
-                <EmotionPanel 
-                  currentEmotion={currentEmotion} 
-                  confidenceLevel={emotionConfidence}
-                  compact={true}
-                />
-              </motion.div>
-              
-              {/* Chat under camera */}
-              <motion.div
-                variants={itemVariants}
-                className="w-full"
-              >
+              {/* Right side - Chat */}
+              <motion.div variants={itemVariants} className="w-full md:w-1/2">
                 <VoiceTranscription messages={messages} />
               </motion.div>
             </div>
