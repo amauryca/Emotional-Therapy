@@ -21,26 +21,24 @@ export const loadFaceModel = async (): Promise<void> => {
     isModelLoading = true;
     console.log('Loading face landmarks detection model...');
 
-    // Load models directly
-    // Specify path for model files
+    // Load models from the properly organized directories
     const modelPath = '/static/models';
     
-    // Try to use the models directly from the root models directory
-    console.log(`Loading models from: ${modelPath}`);
+    console.log(`Loading models from base path: ${modelPath}`);
     
     try {
-      // We're being more specific about model loading
+      // Load each model individually to better track progress
       console.log('Loading tiny face detector model...');
-      await faceapi.nets.tinyFaceDetector.loadFromUri(modelPath);
-      console.log('Tiny face detector model loaded');
+      await faceapi.nets.tinyFaceDetector.loadFromUri(`${modelPath}`);
+      console.log('Tiny face detector model loaded successfully');
       
       console.log('Loading face landmark model...');
-      await faceapi.nets.faceLandmark68Net.loadFromUri(modelPath);
-      console.log('Face landmark model loaded');
+      await faceapi.nets.faceLandmark68Net.loadFromUri(`${modelPath}`);
+      console.log('Face landmark model loaded successfully');
       
       console.log('Loading face expression model...');
-      await faceapi.nets.faceExpressionNet.loadFromUri(modelPath);
-      console.log('Face expression model loaded');
+      await faceapi.nets.faceExpressionNet.loadFromUri(`${modelPath}`);
+      console.log('Face expression model loaded successfully');
     } catch (modelError) {
       console.error('Error loading specific model:', modelError);
       throw modelError;

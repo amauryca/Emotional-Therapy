@@ -36,11 +36,23 @@ export function useFaceDetection({
       try {
         setIsLoading(true);
         setError(null);
+        
+        console.log('Initializing face detection models...');
         await loadFaceModel();
-        setIsReady(true);
+        
+        // Check if models were actually loaded
+        const loaded = isModelLoaded();
+        setIsReady(loaded);
+        
+        if (!loaded) {
+          setError('Models loaded but not properly initialized. Please refresh the page.');
+          console.warn('Models loaded but not properly initialized');
+        } else {
+          console.log('Face detection models ready to use');
+        }
       } catch (err) {
         console.error('Error loading face detection models:', err);
-        setError('Failed to load facial recognition models');
+        setError('Failed to load facial recognition models. Camera features will be limited.');
       } finally {
         setIsLoading(false);
       }
