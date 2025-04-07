@@ -56,17 +56,35 @@ export function EmotionVisualizer({
     
     return colors[emotion] || colors.neutral;
   };
+  
+  // Get animation based on emotion type
+  const getEmotionAnimation = (emotion: Emotion): string => {
+    const animations: Partial<Record<Emotion, string>> = {
+      happy: "animate-bounceIn",
+      surprised: "animate-bounceIn",
+      angry: "animate-pulse",
+      fearful: "animate-breathe",
+      calm: "animate-breathe"
+    };
+    
+    return animations[emotion] || "animate-fadeIn";
+  };
 
   const emotionColor = getEmotionColor(emotion);
+  const emotionAnimation = getEmotionAnimation(emotion);
   
   return (
-    <div className={cn("flex flex-col items-center", className)}>
+    <div className={cn(
+      "flex flex-col items-center",
+      className
+    )}>
       <div 
         className={cn(
-          "rounded-full flex items-center justify-center transition-all duration-300",
+          "rounded-full flex items-center justify-center transition-all",
           emotionColor,
           sizeClasses[size],
-          animActive ? "scale-125" : "scale-100"
+          animActive ? "scale-125" : "scale-100",
+          animActive ? emotionAnimation : ""
         )}
         style={{ 
           opacity: Math.max(0.5, confidence),
@@ -79,7 +97,8 @@ export function EmotionVisualizer({
       {showLabel && (
         <span className={cn(
           "mt-2 font-medium capitalize text-center transition-opacity duration-300",
-          size === "sm" ? "text-xs" : size === "md" ? "text-sm" : "text-base"
+          size === "sm" ? "text-xs" : size === "md" ? "text-sm" : "text-base",
+          animActive ? "animate-fadeIn" : ""
         )}>
           {emotion}
           {confidence > 0 && (

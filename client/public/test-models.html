@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Face API.js Model Test</title>
+  <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.5;
+    }
+    pre {
+      background: #f5f5f5;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    .success {
+      color: green;
+      font-weight: bold;
+    }
+    .error {
+      color: red;
+      font-weight: bold;
+    }
+    #log {
+      margin-top: 20px;
+      border: 1px solid #ddd;
+      padding: 10px;
+      height: 300px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Face API.js Model Test</h1>
+  <button id="testModels">Test Model Loading</button>
+  <div id="log"></div>
+
+  <script>
+    const logElement = document.getElementById('log');
+    
+    function log(message, isError = false) {
+      const logItem = document.createElement('div');
+      logItem.textContent = message;
+      logItem.className = isError ? 'error' : '';
+      if (message.includes('success')) {
+        logItem.className = 'success';
+      }
+      logElement.appendChild(logItem);
+      logElement.scrollTop = logElement.scrollHeight;
+      console.log(message);
+    }
+
+    async function testModels() {
+      log('Starting model test...');
+      log(`Current URL: ${window.location.href}`);
+      
+      try {
+        const modelBasePath = '/models';
+        log(`Using base path: ${modelBasePath}`);
+        
+        // Test if directory listing is available
+        try {
+          const testResponse = await fetch(`${modelBasePath}/tiny_face_detector/`);
+          log(`Directory test response status: ${testResponse.status}`);
+        } catch (e) {
+          log(`Directory test failed: ${e.message}`, true);
+        }
+        
+        // Test if specific model files are accessible
+        try {
+          const manifestResponse = await fetch(`${modelBasePath}/tiny_face_detector/tiny_face_detector_model-weights_manifest.json`);
+          if (manifestResponse.ok) {
+            const manifest = await manifestResponse.json();
+            log(`Manifest file loaded successfully: ${JSON.stringify(manifest).slice(0, 100)}...`);
+          } else {
+            log(`Failed to load manifest file: ${manifestResponse.status}`, true);
+          }
+        } catch (e) {
+          log(`Manifest fetch failed: ${e.message}`, true);
+        }
+        
+        // Try to load models
+        log('Attempting to load tiny face detector model...');
+        await faceapi.nets.tinyFaceDetector.loadFromUri(modelBasePath);
+        log('✅ Tiny face detector model loaded successfully!');
+        
+        log('Attempting to load face landmark model...');
+        await faceapi.nets.faceLandmark68Net.loadFromUri(modelBasePath);
+        log('✅ Face landmark model loaded successfully!');
+        
+        log('Attempting to load face expression model...');
+        await faceapi.nets.faceExpressionNet.loadFromUri(modelBasePath);
+        log('✅ Face expression model loaded successfully!');
+        
+        log('All models loaded successfully!');
+      } catch (error) {
+        log(`Error: ${error.message}`, true);
+        if (error.stack) {
+          log(`Stack: ${error.stack}`, true);
+        }
+      }
+    }
+
+    document.getElementById('testModels').addEventListener('click', testModels);
+    
+    // Auto-run test
+    window.addEventListener('load', () => {
+      setTimeout(testModels, 1000);
+    });
+  </script>
+</body>
+</html>
