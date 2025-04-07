@@ -1,0 +1,225 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Soothing blues and grounded greens for a calming therapeutic experience */
+    --background: 210 20% 98%; /* Soft blue background */
+    --foreground: 215 35% 25%;
+    
+    --card: 210 15% 97%;
+    --card-foreground: 215 35% 25%;
+    
+    --popover: 210 15% 97%;
+    --popover-foreground: 215 35% 25%;
+    
+    --primary: 210 60% 60%; /* Soothing blue primary */
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 150 30% 82%; /* Grounded green */
+    --secondary-foreground: 215 35% 25%;
+    
+    --muted: 210 10% 92%;
+    --muted-foreground: 215 15% 50%;
+    
+    --accent: 180 50% 70%; /* Calming teal accent */
+    --accent-foreground: 215 35% 25%;
+    
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 210 15% 88%;
+    --input: 210 15% 88%;
+    --ring: 210 60% 60%;
+    
+    --chart-1: 210 60% 60%;
+    --chart-2: 150 30% 70%;
+    --chart-3: 180 50% 70%;
+    --chart-4: 200 40% 60%;
+    --chart-5: 240 35% 65%;
+    
+    /* Green and blue color scale for various UI elements */
+    --blue-50: hsl(210, 60%, 97%);
+    --blue-100: hsl(210, 60%, 94%);
+    --blue-200: hsl(210, 60%, 88%);
+    --blue-300: hsl(210, 60%, 80%);
+    --blue-400: hsl(210, 60%, 70%);
+    --blue-500: hsl(210, 60%, 60%);
+    --blue-600: hsl(210, 60%, 50%);
+    --blue-700: hsl(210, 60%, 40%);
+    --blue-800: hsl(210, 60%, 30%);
+    --blue-900: hsl(210, 60%, 20%);
+    
+    --green-50: hsl(150, 30%, 97%);
+    --green-100: hsl(150, 30%, 94%);
+    --green-200: hsl(150, 30%, 88%);
+    --green-300: hsl(150, 30%, 80%);
+    --green-400: hsl(150, 30%, 70%);
+    --green-500: hsl(150, 30%, 60%);
+    --green-600: hsl(150, 30%, 50%);
+    --green-700: hsl(150, 30%, 40%);
+    --green-800: hsl(150, 30%, 30%);
+    --green-900: hsl(150, 30%, 20%);
+    
+    /* For backward compatibility with existing beige classes */
+    --beige-50: hsl(210, 60%, 97%);
+    --beige-100: hsl(210, 60%, 94%);
+    --beige-200: hsl(210, 60%, 88%);
+    --beige-300: hsl(210, 60%, 80%);
+    --beige-400: hsl(210, 60%, 70%);
+    --beige-500: hsl(210, 60%, 60%);
+    --beige-600: hsl(210, 60%, 50%);
+    --beige-700: hsl(210, 60%, 40%);
+    --beige-800: hsl(210, 60%, 30%);
+    --beige-900: hsl(210, 60%, 20%);
+    
+    --radius: 0.75rem;
+  }
+  
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply font-sans antialiased text-foreground;
+    background: linear-gradient(
+      135deg,
+      hsl(210, 60%, 97%),
+      hsl(180, 40%, 96%),
+      hsl(150, 30%, 96%)
+    );
+    background-attachment: fixed;
+    background-size: 200% 200%;
+    animation: gradientShift 20s ease infinite;
+    min-height: 100vh;
+  }
+  
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  /* Enhanced animations for a more engaging, soothing experience */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideUp {
+    from { transform: translateY(10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  
+  @keyframes slideInLeft {
+    from { transform: translateX(-10px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  
+  @keyframes slideInRight {
+    from { transform: translateX(10px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  
+  @keyframes bounceIn {
+    0% { transform: scale(0.9); opacity: 0; }
+    60% { transform: scale(1.03); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  
+  @keyframes breathe {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.02); }
+  }
+  
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(var(--primary), 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(var(--primary), 0); }
+    100% { box-shadow: 0 0 0 0 rgba(var(--primary), 0); }
+  }
+  
+  @keyframes ripple {
+    0% { 
+      opacity: 0;
+      transform: scale(0.8); 
+    }
+    25% { 
+      opacity: 0.5;
+    }
+    100% { 
+      opacity: 0;
+      transform: scale(2.5); 
+    }
+  }
+  
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+  }
+  
+  @keyframes glow {
+    0%, 100% { filter: drop-shadow(0 0 5px rgba(var(--accent), 0.5)); }
+    50% { filter: drop-shadow(0 0 15px rgba(var(--accent), 0.8)); }
+  }
+  
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  /* Animation utility classes */  
+  .animate-fadeIn {
+    animation: fadeIn 0.6s ease-out;
+  }
+  
+  .animate-slideUp {
+    animation: slideUp 0.6s ease-out;
+  }
+  
+  .animate-slideInLeft {
+    animation: slideInLeft 0.5s ease-out;
+  }
+  
+  .animate-slideInRight {
+    animation: slideInRight 0.5s ease-out;
+  }
+  
+  .animate-bounceIn {
+    animation: bounceIn 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  
+  .animate-breathe {
+    animation: breathe 3s infinite ease-in-out;
+  }
+  
+  .animate-pulse {
+    animation: pulse 2s infinite;
+  }
+  
+  .animate-ripple {
+    animation: ripple 1.5s linear infinite;
+  }
+  
+  .animate-float {
+    animation: float 5s ease-in-out infinite;
+  }
+  
+  .animate-glow {
+    animation: glow 3s ease-in-out infinite;
+  }
+  
+  .animate-shimmer {
+    background: linear-gradient(
+      90deg, 
+      rgba(var(--blue-300), 0) 0%, 
+      rgba(var(--blue-300), 0.2) 25%, 
+      rgba(var(--green-300), 0.2) 50%, 
+      rgba(var(--blue-300), 0.2) 75%, 
+      rgba(var(--blue-300), 0) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 6s linear infinite;
+  }
+}
