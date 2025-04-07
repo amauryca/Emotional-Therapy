@@ -8,8 +8,10 @@ import { CameraView } from '@/components/voice-therapy/CameraView';
 import { EmotionPanel } from '@/components/voice-therapy/EmotionPanel';
 import { EmotionVisualizer } from '@/components/voice-therapy/EmotionVisualizer';
 import VoiceTranscription from '@/components/voice-therapy/VoiceTranscription';
+import AmbientSoundPlayer from '@/components/voice-therapy/AmbientSoundPlayer';
 import InstructionsCard from '@/components/voice-therapy/InstructionsCard';
 import AgeGroupSelector from '@/components/shared/AgeGroupSelector';
+import { SuccessNotification } from '@/components/ui/success-notification';
 import { usePuterAI } from '@/hooks/usePuterAI';
 import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
 import { INITIAL_MESSAGES, EMOTION_ICONS, VOCAL_TONE_ICONS } from '@/lib/constants';
@@ -38,6 +40,11 @@ export default function VoiceTherapy() {
   
   // Camera enabled state
   const [cameraEnabled, setCameraEnabled] = useState(true);
+  
+  // Success notification state
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  
   
   // Speech recognition setup
   const { 
@@ -100,6 +107,19 @@ export default function VoiceTherapy() {
       
       // Send message with both facial emotion and vocal tone context
       sendMessage(speechResult, currentEmotion, vocalTone as VocalTone);
+      
+      // Show success notification with confetti for positive interaction
+      if (messages.length > 0 && 
+          (currentEmotion === 'happy' || 
+           currentEmotion === 'surprised' || 
+           currentVocalTone === 'excited')) {
+        setSuccessMessage('Great job expressing yourself!');
+        setShowSuccess(true);
+        
+        setTimeout(() => {
+          setShowSuccess(false);
+        }, 3000);
+      }
     }
   };
 
@@ -158,6 +178,13 @@ export default function VoiceTherapy() {
       animate="visible"
       variants={containerVariants}
     >
+      {/* Success notification with confetti */}
+      <SuccessNotification 
+        show={showSuccess}
+        message={successMessage}
+        duration={3000}
+        withConfetti={true}
+      />
       {/* Model Status Indicators */}
       <motion.div 
         className="flex justify-center mb-4 gap-2"
@@ -285,36 +312,14 @@ export default function VoiceTherapy() {
               )}
             </motion.div>
             
-            <motion.div 
-              className="flex flex-col md:flex-row gap-6 md:gap-8 max-w-full"
-              variants={itemVariants}
-            >
-              <div className="md:w-1/2 flex flex-col gap-4">
-                {/* Emotion detection with camera */}
-                <CameraView 
-                  isEnabled={cameraEnabled}
-                  onEmotionDetected={(result) => {
-                    handleEmotionChange(result.emotion, result.confidence);
-                  }} 
-                  className="w-full"
-                />
-                
-                {/* Emotion stats panel */}
-                <EmotionPanel 
-                  currentEmotion={currentEmotion} 
-                  confidenceLevel={emotionConfidence}
-                  compact={true}
-                />
-              </div>
-              
+            {/* Main two column layout - camera and chat */}
+            <div className="flex flex-col gap-6">
+              {/* Camera and emotion detection */}
               <motion.div 
-                className="md:w-1/2 w-full flex-shrink-0 flex-grow md:min-w-[320px] flex flex-col gap-4"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7 }}
+                className="flex justify-between items-center mb-2"
+                variants={itemVariants}
               >
-                {/* Voice controls */}
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-3">
                   <Button 
                     onClick={toggleVoiceRecognition}
                     variant={voiceEnabled ? "default" : "outline"}
@@ -332,10 +337,43 @@ export default function VoiceTherapy() {
                   </Button>
                 </div>
                 
-                {/* Chat Transcription */}
+                {/* Ambient Sound Player */}
+                <AmbientSoundPlayer />
+              </motion.div>
+              
+              {/* Camera View */}
+              <motion.div
+                variants={itemVariants}
+              >
+                <CameraView 
+                  isEnabled={cameraEnabled}
+                  onEmotionDetected={(result) => {
+                    handleEmotionChange(result.emotion, result.confidence);
+                  }} 
+                  className="w-full h-[300px] md:h-[350px]"
+                />
+              </motion.div>
+              
+              {/* Emotion Panel */}
+              <motion.div
+                variants={itemVariants}
+                className="mb-2"
+              >
+                <EmotionPanel 
+                  currentEmotion={currentEmotion} 
+                  confidenceLevel={emotionConfidence}
+                  compact={true}
+                />
+              </motion.div>
+              
+              {/* Chat under camera */}
+              <motion.div
+                variants={itemVariants}
+                className="w-full"
+              >
                 <VoiceTranscription messages={messages} />
               </motion.div>
-            </motion.div>
+            </div>
             
             {/* Processing indicator with animation */}
             <AnimatePresence>
