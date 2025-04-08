@@ -12,10 +12,10 @@ import {
 
 // Define available ambient sounds
 const AMBIENT_SOUNDS = [
-  { id: "rainfall", name: "Gentle Rain", icon: "🌧️", src: "/ambient/rainfall.mp3" },
-  { id: "waves", name: "Ocean Waves", icon: "🌊", src: "/ambient/waves.mp3" },
-  { id: "birds", name: "Forest Birds", icon: "🐦", src: "/ambient/birds.mp3" },
-  { id: "meditation", name: "Meditation", icon: "🧘", src: "/ambient/meditation.mp3" }
+  { id: "rainfall", name: "Gentle Rain", icon: "🌧️", src: "https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0c6ff1bda.mp3?filename=rain-ambient-114354.mp3" },
+  { id: "waves", name: "Ocean Waves", icon: "🌊", src: "https://cdn.pixabay.com/download/audio/2021/09/06/audio_fd98c296d8.mp3?filename=ocean-waves-112924.mp3" },
+  { id: "birds", name: "Forest Birds", icon: "🐦", src: "https://cdn.pixabay.com/download/audio/2021/04/08/audio_c8812627da.mp3?filename=birds-singing-01-6771.mp3" },
+  { id: "meditation", name: "Meditation", icon: "🧘", src: "https://cdn.pixabay.com/download/audio/2021/04/07/audio_fdafdde100.mp3?filename=meditation-112191.mp3" }
 ];
 
 interface AmbientSoundPlayerProps {

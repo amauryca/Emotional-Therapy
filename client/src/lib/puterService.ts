@@ -10,18 +10,14 @@ const API_TIMEOUT = 15000;
 
 // Default system message for the AI
 const DEFAULT_SYSTEM_MESSAGE = `
-You are a compassionate AI mental health assistant. Your responses should be:
-- Empathetic and supportive, showing understanding of emotions
-- Non-judgmental and respectful of all experiences
-- Clear and concise, using accessible language
-- Informative about general mental health concepts when appropriate
-- Careful to never diagnose or prescribe treatment
-- Honest about your limitations as an AI assistant
+You are a friendly AI helper. Your responses must be:
+- Short and simple (1-3 sentences only)
+- Kind and understanding
+- Easy to understand 
+- Focused on the user's feelings
+- Never giving medical advice
 
-Important: Always remind users that you're an AI tool meant for emotional support,
-not a replacement for professional mental health services. If they appear to be in 
-distress or seeking medical/psychological advice, gently encourage them to speak 
-with a qualified professional.
+Keep all responses brief and easy to understand, regardless of age group.
 `;
 
 // Define interface for prompt template parameters
@@ -49,9 +45,9 @@ function formatPrompt({
   
   // Add age-appropriate guidance
   if (ageGroup === 'children') {
-    formattedPrompt += `\nThe user is a child, so use simple language, short sentences, and concrete examples. Be patient, encouraging, and use a warm, friendly tone.`;
+    formattedPrompt += `\nThe user is a child. Use very simple words and short sentences. Be friendly and encouraging.`;
   } else if (ageGroup === 'teenagers') {
-    formattedPrompt += `\nThe user is a teenager, so use accessible language but don't oversimplify. Be genuine, avoid talking down, and acknowledge their capacity for complex emotions.`;
+    formattedPrompt += `\nThe user is a teenager. Be direct and honest. Don't talk down to them.`;
   }
   
   // Add context about detected emotional state if available
@@ -120,7 +116,7 @@ export async function callPuterAI(params: PromptParams): Promise<PuterAIResponse
     // Return a fallback response
     return {
       message: {
-        content: "I'm having trouble connecting right now. Could you please try again in a moment?",
+        content: "Having trouble connecting. Try again?",
         role: "assistant"
       }
     };
@@ -151,7 +147,7 @@ export async function getEmotionalSupportResponse(
     return response.message.content;
   } catch (error) {
     console.error('Error getting emotional support response:', error);
-    return "I'm here to listen and support you, but I'm having some trouble processing right now. Could you please share your thoughts again?";
+    return "I'm having trouble right now. Could you try again?";
   }
 }
 
@@ -184,13 +180,13 @@ export async function loadPuterJs(): Promise<void> {
             chat: async (prompt: string) => {
               console.log('Using fallback Puter.js AI response');
               
-              // Therapeutic responses for different situations
+              // Simple therapeutic responses for different situations
               const responses = [
-                "I understand you're feeling a range of emotions right now. It's completely normal to have these feelings, and I appreciate you sharing them with me. Would you like to talk more about what's been happening?",
-                "Thank you for sharing that with me. It sounds like you've been going through a lot. What specifically has been the most challenging for you?",
-                "I'm here to listen and support you through this. Sometimes putting our feelings into words can help us process them better. Is there anything specific you'd like to focus on today?",
-                "That's really insightful of you to notice those patterns. How do you feel when you recognize these emotions coming up?",
-                "It takes courage to share these feelings. I'm glad you're taking this time for yourself. What would be most helpful for you right now?"
+                "I understand how you feel. Would you like to tell me more?",
+                "Thanks for sharing that. What's been the hardest part?",
+                "I'm here to listen. What would help you the most right now?",
+                "That's really brave of you to share. How do you feel about it?",
+                "I hear you. What would make you feel better today?"
               ];
               
               // Randomly select a response that feels like a thoughtful reply
@@ -221,7 +217,7 @@ export async function loadPuterJs(): Promise<void> {
           ai: {
             chat: async () => ({
               message: {
-                content: "I'm here to support you. Please feel free to share what's on your mind.",
+                content: "I'm here to help. How are you feeling today?",
                 role: "assistant"
               }
             })

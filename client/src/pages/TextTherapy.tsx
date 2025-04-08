@@ -127,7 +127,13 @@ export default function TextTherapy() {
               >
                 💬
               </motion.div>
-              <CardTitle className="text-green-700">AI Text Therapist</CardTitle>
+              <div className="flex flex-col">
+                <CardTitle className="text-green-700">AI Text Therapist</CardTitle>
+                <Badge variant="secondary" className="mt-1 bg-green-100 text-green-800 hover:bg-green-200">
+                  <span className="mr-1">{getEmotionIcon()}</span>
+                  {currentEmotion.charAt(0).toUpperCase() + currentEmotion.slice(1)}
+                </Badge>
+              </div>
             </motion.div>
             
             {/* Age Group Selector with animation */}

@@ -8,6 +8,7 @@ import { Brain, Heart, ShieldPlus, SmilePlus, Frown, Zap, Lightbulb, List, Check
 import { getEmotionHistory } from '@/lib/faceApiLoader';
 import { getVocalToneHistory } from '@/lib/ai';
 import { Emotion, VocalTone } from '@/types';
+import { EMOTION_ICONS } from '@/lib/constants';
 
 // Create types for module content
 interface ModuleContent {
@@ -543,13 +544,19 @@ export default function ModulesPage() {
               {dominantEmotion && (
                 <span className="inline-flex items-center bg-secondary/50 px-2 py-1 rounded-md ml-2">
                   <span className="font-medium mr-1">Primary emotion:</span>
-                  <span className="capitalize">{dominantEmotion}</span>
+                  <span className="capitalize flex items-center gap-1">
+                    <span>{dominantEmotion}</span>
+                    <span className="text-lg ml-1">{EMOTION_ICONS[dominantEmotion] || '😐'}</span>
+                  </span>
                 </span>
               )}
               {secondaryEmotion && (
                 <span className="inline-flex items-center bg-secondary/50 px-2 py-1 rounded-md ml-2">
                   <span className="font-medium mr-1">Secondary:</span>
-                  <span className="capitalize">{secondaryEmotion}</span>
+                  <span className="capitalize flex items-center gap-1">
+                    <span>{secondaryEmotion}</span>
+                    <span className="text-lg ml-1">{EMOTION_ICONS[secondaryEmotion] || '😐'}</span>
+                  </span>
                 </span>
               )}
             </p>
