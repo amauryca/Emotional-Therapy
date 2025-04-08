@@ -149,22 +149,8 @@ export default function HomePage() {
     }
   ];
   
-  const [currentMood, setCurrentMood] = useState<'calm' | 'happy' | 'peaceful'>('calm');
-  
-  // Cycle through different therapeutic moods/colors
-  useEffect(() => {
-    const moodInterval = setInterval(() => {
-      setCurrentMood(prevMood => {
-        switch(prevMood) {
-          case 'calm': return 'peaceful';
-          case 'peaceful': return 'happy';
-          default: return 'calm';
-        }
-      });
-    }, 10000); // Change every 10 seconds
-    
-    return () => clearInterval(moodInterval);
-  }, []);
+  // Use a fixed therapeutic mood - 'calm' for consistency
+  const currentMood = 'calm';
 
   return (
     <TherapeuticBackground mood={currentMood} className="min-h-screen py-8 px-4">

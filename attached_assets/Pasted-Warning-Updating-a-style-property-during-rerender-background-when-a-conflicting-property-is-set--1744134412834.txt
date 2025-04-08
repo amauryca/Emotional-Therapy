@@ -1,0 +1,23 @@
+Warning: Updating a style property during rerender (background) when a conflicting property is set (backgroundSize) can lead to styling bugs. To avoid this, don&#x27;t mix shorthand and non-shorthand properties for the same value; instead, replace the shorthand with separate values.
+    at div
+    at TherapeuticBackground (https://c2804235-bdf2-4637-a60d-3c247789c7bd-00-3tx53s1b6x14e.spock.replit.dev/src/components/ui/animations.tsx:33:3)
+    at HomePage (https://c2804235-bdf2-4637-a60d-3c247789c7bd-00-3tx53s1b6x14e.spock.replit.dev/src/pages/HomePage.tsx:35:57)
+    at Route (https://c2804235-bdf2-4637-a60d-3c247789c7bd-00-3tx53s1b6x14e.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=90f893b4:323:16)
+    at Switch (https://c2804235-bdf2-4637-a60d-3c247789c7bd-00-3tx53s1b6x14e.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=90f893b4:379:17)
+    at main
+    at div
+    at Router
+    at QueryClientProvider (https://c2804235-bdf2-4637-a60d-3c247789c7bd-00-3tx53s1b6x14e.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=90f893b4:2805:3)
+    at App (https://c2804235-bdf2-4637-a60d-3c247789c7bd-00-3tx53s1b6x14e.spock.replit.dev/src/App.tsx?v=yyVZIOPys3QLU_n_tAIsX:99:3)
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+Warning: Updating a style property during rerender (background) when a conflicting property is set (backgroundSize) can lead to styling bugs. To avoid this, don&#x27;t mix shorthand and non-shorthand properties for the same value; instead, replace the shorthand with separate values.
+    at div
+    at TherapeuticBackground (https://c2804235-bdf2-4637-a60d-3c247789c7bd-00-3tx53s1b6x14e.spock.replit.dev/src/components/ui/animations.tsx:33:3)
+    at HomePage (https://c2804235-bdf2-4637-a60d-3c247789c7bd-00-3tx53s1b6x14e.spock.replit.dev/src/pages/HomePage.tsx:35:57)
+    at Route (https://c2804235-bdf2-4637-a60d-3c247789c7bd-00-3tx53s1b6x14e.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=90f893b4:323:16)
+    at Switch (https://c2804235-bdf2-4637-a60d-3c247789c7bd-00-3tx53s1b6x14e.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=90f893b4:379:17)
+    at main
+    at div
+    at Router
+    at QueryClientProvider (https://c2804235-bdf2-4637-a60d-3c247789c7bd-00-3tx53s1b6x14e.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=90f893b4:2805:3)
+    at App (https://c2804235-bdf2-4637-a60d-3c247789c7bd-00-3tx53s1b6x14e.spock.replit.dev/src/App.tsx?v=yyVZIOPys3QLU_n_tAIsX:99:3)

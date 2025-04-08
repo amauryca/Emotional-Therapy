@@ -24,48 +24,22 @@ interface TherapeuticGradientProps {
 }
 
 /**
- * Background gradient that shifts with calming therapeutic colors
+ * Background gradient with therapeutic colors
  */
 export const TherapeuticBackground: React.FC<TherapeuticGradientProps> = ({ 
   children, 
   mood = 'calm',
   className = ''
 }) => {
-  const [gradientAngle, setGradientAngle] = useState(45);
-  
-  useEffect(() => {
-    // Gently animate the gradient angle for subtle movement
-    const interval = setInterval(() => {
-      setGradientAngle(prev => {
-        // Oscillate between 30 and 60 degrees
-        const newAngle = prev + 0.2;
-        return newAngle > 60 ? 30 : newAngle;
-      });
-    }, 100);
-    
-    return () => clearInterval(interval);
-  }, []);
-  
   const colorSet = THERAPEUTIC_COLORS[mood];
   
   return (
     <div 
       className={`relative overflow-hidden ${className}`}
       style={{
-        background: `linear-gradient(${gradientAngle}deg, ${colorSet[0]} 0%, ${colorSet[2]} 50%, ${colorSet[4]} 100%)`,
-        backgroundSize: '400% 400%',
-        animation: 'gradientAnimation 15s ease infinite'
+        backgroundImage: `linear-gradient(45deg, ${colorSet[0]} 0%, ${colorSet[2]} 50%, ${colorSet[4]} 100%)`,
       }}
     >
-      <style dangerouslySetInnerHTML={{
-        __html: `
-          @keyframes gradientAnimation {
-            0% { background-position: 0% 50% }
-            50% { background-position: 100% 50% }
-            100% { background-position: 0% 50% }
-          }
-        `
-      }} />
       {children}
     </div>
   );
@@ -91,7 +65,7 @@ export const TherapeuticTransition: React.FC<{
       }}
       className={className}
       style={{
-        background: `linear-gradient(135deg, ${THERAPEUTIC_COLORS[mood][0]} 0%, ${THERAPEUTIC_COLORS[mood][2]} 100%)`,
+        backgroundImage: `linear-gradient(135deg, ${THERAPEUTIC_COLORS[mood][0]} 0%, ${THERAPEUTIC_COLORS[mood][2]} 100%)`,
       }}
     >
       {children}
@@ -284,7 +258,7 @@ export const TherapeuticButton: React.FC<{
       onClick={handleClick}
       className={`relative overflow-hidden transition-all ${className}`}
       style={{
-        background: `linear-gradient(135deg, ${colorSet[1]} 0%, ${colorSet[3]} 100%)`,
+        backgroundImage: `linear-gradient(135deg, ${colorSet[1]} 0%, ${colorSet[3]} 100%)`,
       }}
     >
       {children}
