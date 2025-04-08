@@ -103,9 +103,17 @@ export function usePuterAI({
     setError(null);
     
     try {
-      // Check if window.puter exists
-      if (!window.puter || !window.puter.ai) {
-        throw new Error('Puter AI is not available');
+      // Check if window.puter exists - if not, try to initialize it on-demand
+      if (!window.puter || !window.puter.ai || !window.puter.ai.chat) {
+        console.log('Puter AI not detected, attempting to initialize...');
+        // Import and call the initializePuterJs function
+        const { initializePuterJs } = await import('@/lib/puterService');
+        await initializePuterJs();
+        
+        // Verify again
+        if (!window.puter || !window.puter.ai || !window.puter.ai.chat) {
+          throw new Error('Puter AI is not available despite initialization attempt');
+        }
       }
       
       // Update recent topics with keywords from user message
@@ -139,8 +147,19 @@ export function usePuterAI({
         `${conversationContext}\n\n${prompt}` : 
         prompt;
       
-      // Call puter.ai.chat with the final prompt
-      const response = await window.puter.ai.chat(finalPrompt);
+      // Set up timeout for API call
+      const timeoutPromise = new Promise<{message: {content: string, role: string}}>((_, reject) => {
+        const id = setTimeout(() => {
+          clearTimeout(id);
+          reject(new Error('AI response timed out'));
+        }, 10000); // 10 second timeout
+      });
+      
+      // Call puter.ai.chat with the final prompt with timeout protection
+      const response = await Promise.race([
+        window.puter.ai.chat(finalPrompt),
+        timeoutPromise
+      ]);
       
       // Check if we got a valid response
       if (!response || !response.message || !response.message.content) {
@@ -175,14 +194,29 @@ export function usePuterAI({
       
     } catch (err) {
       console.error('Error processing AI response:', err);
-      setError('I encountered an issue processing your request. Please try again.');
       
-      // Add error message to chat
+      // Provide a more helpful error message based on the type of error
+      let errorContent = 'I encountered an issue processing your request. Please try again.';
+      
+      if (err instanceof Error) {
+        if (err.message.includes('timeout') || err.message.includes('timed out')) {
+          errorContent = "I'm thinking a bit longer than usual. Let's try again with a simpler response.";
+        } else if (err.message.includes('not available')) {
+          errorContent = "I'm having trouble connecting right now. I'm still here to listen though. Could you try sharing again?";
+        }
+      }
+      
+      setError(errorContent);
+      
+      // Add friendly error message to chat
       const errorMessage: TherapyMessage = {
         id: uuidv4(),
-        content: 'I encountered an issue processing your request. Please try again.',
+        content: errorContent,
         role: 'assistant',
-        timestamp: new Date()
+        timestamp: new Date(),
+        mood: {
+          emotion: 'neutral' as any
+        }
       };
       
       setMessages(prev => [...prev, errorMessage]);

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Brain, MessageCircle, Mic, BarChart, BookOpen, ChevronDown, ChevronRight, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,6 +6,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion, AnimatePresence } from "framer-motion";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import MentalHealthTips from "@/components/shared/MentalHealthTips";
+import { 
+  TherapeuticBackground, 
+  TherapeuticBubbles, 
+  TherapeuticPulse, 
+  TherapeuticWave,
+  THERAPEUTIC_COLORS
+} from "@/components/ui/animations";
 
 export default function HomePage() {
   // State for education module visibility
@@ -142,46 +149,74 @@ export default function HomePage() {
     }
   ];
   
+  const [currentMood, setCurrentMood] = useState<'calm' | 'happy' | 'peaceful'>('calm');
+  
+  // Cycle through different therapeutic moods/colors
+  useEffect(() => {
+    const moodInterval = setInterval(() => {
+      setCurrentMood(prevMood => {
+        switch(prevMood) {
+          case 'calm': return 'peaceful';
+          case 'peaceful': return 'happy';
+          default: return 'calm';
+        }
+      });
+    }, 10000); // Change every 10 seconds
+    
+    return () => clearInterval(moodInterval);
+  }, []);
+
   return (
-    <div className="max-w-4xl mx-auto py-8">
-      <motion.div 
-        className="text-center mb-12"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-      >
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ 
-            duration: 0.8, 
-            delay: 0.3,
-            type: "spring",
-            stiffness: 100
-          }}
+    <TherapeuticBackground mood={currentMood} className="min-h-screen py-8 px-4">
+      <TherapeuticBubbles mood={currentMood} count={15} size="small" />
+      
+      <div className="max-w-4xl mx-auto relative z-10">
+        <motion.div 
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <Brain className="mx-auto h-20 w-20 text-beige-600 mb-4" />
+          <TherapeuticPulse 
+            color={THERAPEUTIC_COLORS[currentMood][3]} 
+            size={80} 
+            className="mx-auto mb-4"
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ 
+                duration: 0.8, 
+                delay: 0.3,
+                type: "spring",
+                stiffness: 100
+              }}
+            >
+              <Brain className="mx-auto h-16 w-16 text-white" />
+            </motion.div>
+          </TherapeuticPulse>
+          
+          <TherapeuticWave amplitude={3} speed={4}>
+            <motion.h1 
+              className="text-3xl md:text-4xl font-bold text-white mb-4 drop-shadow-md"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 0.5 }}
+            >
+              Welcome to Therapeutic AI
+            </motion.h1>
+          </TherapeuticWave>
+          
+          <motion.p 
+            className="text-xl text-white max-w-2xl mx-auto drop-shadow-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.7 }}
+          >
+            A safe space where artificial intelligence helps you process your thoughts
+            and feelings through voice or text interaction.
+          </motion.p>
         </motion.div>
-        
-        <motion.h1 
-          className="text-3xl md:text-4xl font-bold text-beige-800 mb-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.5 }}
-        >
-          Welcome to Therapeutic AI
-        </motion.h1>
-        
-        <motion.p 
-          className="text-xl text-beige-600 max-w-2xl mx-auto"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.7 }}
-        >
-          A safe space where artificial intelligence helps you process your thoughts
-          and feelings through voice or text interaction.
-        </motion.p>
-      </motion.div>
 
       <motion.div 
         className="grid md:grid-cols-2 gap-6 mb-8"
@@ -422,5 +457,6 @@ export default function HomePage() {
         </Card>
       </motion.div>
     </div>
+    </TherapeuticBackground>
   );
 }
