@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "wouter";
 import { Brain, MessageCircle, Mic, BarChart, BookOpen, ChevronDown, ChevronRight, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,13 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion, AnimatePresence } from "framer-motion";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import MentalHealthTips from "@/components/shared/MentalHealthTips";
-import { 
-  TherapeuticBackground, 
-  TherapeuticBubbles, 
-  TherapeuticPulse, 
-  TherapeuticWave,
-  THERAPEUTIC_COLORS
-} from "@/components/ui/animations";
+import { TherapeuticPulse, THERAPEUTIC_COLORS } from "@/components/ui/animations";
 
 export default function HomePage() {
   // State for education module visibility
@@ -153,8 +147,8 @@ export default function HomePage() {
   const currentMood = 'calm';
 
   return (
-    <TherapeuticBackground mood={currentMood} className="min-h-screen py-8 px-4">
-      <TherapeuticBubbles mood={currentMood} count={15} size="small" />
+    <div className="min-h-screen py-8 px-4"
+         style={{ background: "linear-gradient(135deg, #f0f7ff 0%, #e6f0ff 100%)" }}>
       
       <div className="max-w-4xl mx-auto relative z-10">
         <motion.div 
@@ -182,19 +176,17 @@ export default function HomePage() {
             </motion.div>
           </TherapeuticPulse>
           
-          <TherapeuticWave amplitude={3} speed={4}>
-            <motion.h1 
-              className="text-3xl md:text-4xl font-bold text-white mb-4 drop-shadow-md"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 0.5 }}
-            >
-              Welcome to Therapeutic AI
-            </motion.h1>
-          </TherapeuticWave>
+          <motion.h1 
+            className="text-3xl md:text-4xl font-bold text-blue-700 mb-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.5 }}
+          >
+            Welcome to Therapeutic AI
+          </motion.h1>
           
           <motion.p 
-            className="text-xl text-white max-w-2xl mx-auto drop-shadow-sm"
+            className="text-xl text-blue-600 max-w-2xl mx-auto"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.7 }}
@@ -204,86 +196,129 @@ export default function HomePage() {
           </motion.p>
         </motion.div>
 
-      <motion.div 
-        className="grid md:grid-cols-2 gap-6 mb-8"
-        variants={container}
-        initial="hidden"
-        animate="show"
-      >
-        <motion.div variants={item}>
-          <motion.div
-            whileHover="hover"
-            initial="rest"
-            animate="rest"
-            variants={cardHover}
+        <motion.div 
+          className="grid md:grid-cols-2 gap-6 mb-8"
+          variants={container}
+          initial="hidden"
+          animate="show"
+        >
+          <motion.div variants={item}>
+            <motion.div
+              whileHover="hover"
+              initial="rest"
+              animate="rest"
+              variants={cardHover}
+            >
+              <Card className="bg-beige-100 h-full transition-all duration-300 border-2 border-beige-200">
+                <CardHeader>
+                  <CardTitle className="flex items-center text-beige-700">
+                    <Mic className="mr-2 h-5 w-5" />
+                    Voice Therapy
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="flex flex-col h-full">
+                  <p className="text-beige-600 mb-6 flex-grow">
+                    Speak naturally with our AI therapist that analyzes your facial expressions
+                    and vocal tone to provide personalized therapeutic responses.
+                  </p>
+                  <Link href="/voice" className="block">
+                    <Button className="w-full bg-beige-500 hover:bg-beige-600 text-white transition-all duration-300 transform hover:translate-y-[-2px]">
+                      <motion.span
+                        whileHover={{ scale: 1.05 }}
+                        className="flex items-center justify-center"
+                      >
+                        <Mic className="mr-2 h-4 w-4" />
+                        Start Voice Session
+                      </motion.span>
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </motion.div>
+
+          <motion.div variants={item}>
+            <motion.div
+              whileHover="hover"
+              initial="rest"
+              animate="rest"
+              variants={cardHover}
+            >
+              <Card className="bg-beige-100 h-full transition-all duration-300 border-2 border-beige-200">
+                <CardHeader>
+                  <CardTitle className="flex items-center text-beige-700">
+                    <MessageCircle className="mr-2 h-5 w-5" />
+                    Text Therapy
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="flex flex-col h-full">
+                  <p className="text-beige-600 mb-6 flex-grow">
+                    Type your thoughts and feelings in a private chat with our AI therapist
+                    that provides thoughtful, empathetic responses to your messages.
+                  </p>
+                  <Link href="/text" className="block">
+                    <Button className="w-full bg-beige-500 hover:bg-beige-600 text-white transition-all duration-300 transform hover:translate-y-[-2px]">
+                      <motion.span
+                        whileHover={{ scale: 1.05 }}
+                        className="flex items-center justify-center"
+                      >
+                        <MessageCircle className="mr-2 h-4 w-4" />
+                        Start Text Session
+                      </motion.span>
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </motion.div>
+          
+          <motion.div 
+            variants={item}
+            className="md:col-span-2"
           >
-            <Card className="bg-beige-100 h-full transition-all duration-300 border-2 border-beige-200">
-              <CardHeader>
-                <CardTitle className="flex items-center text-beige-700">
-                  <Mic className="mr-2 h-5 w-5" />
-                  Voice Therapy
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="flex flex-col h-full">
-                <p className="text-beige-600 mb-6 flex-grow">
-                  Speak naturally with our AI therapist that analyzes your facial expressions
-                  and vocal tone to provide personalized therapeutic responses.
-                </p>
-                <Link href="/voice" className="block">
-                  <Button className="w-full bg-beige-500 hover:bg-beige-600 text-white transition-all duration-300 transform hover:translate-y-[-2px]">
-                    <motion.span
-                      whileHover={{ scale: 1.05 }}
-                      className="flex items-center justify-center"
-                    >
-                      <Mic className="mr-2 h-4 w-4" />
-                      Start Voice Session
-                    </motion.span>
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+            <motion.div
+              whileHover="hover"
+              initial="rest"
+              animate="rest"
+              variants={cardHover}
+            >
+              <Card className="bg-beige-100 transition-all duration-300 border-2 border-beige-200">
+                <CardHeader>
+                  <CardTitle className="flex items-center text-beige-700">
+                    <BarChart className="mr-2 h-5 w-5" />
+                    Emotion Statistics
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-beige-600 mb-6">
+                    Track your emotional patterns over time with our statistics dashboard.
+                    See how your mood changes throughout your therapy sessions.
+                  </p>
+                  <Link href="/stats" className="block">
+                    <Button className="w-full bg-beige-500 hover:bg-beige-600 text-white transition-all duration-300 transform hover:translate-y-[-2px]">
+                      <motion.span
+                        whileHover={{ scale: 1.05 }}
+                        className="flex items-center justify-center"
+                      >
+                        <BarChart className="mr-2 h-4 w-4" />
+                        View Statistics
+                      </motion.span>
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </motion.div>
           </motion.div>
         </motion.div>
 
-        <motion.div variants={item}>
-          <motion.div
-            whileHover="hover"
-            initial="rest"
-            animate="rest"
-            variants={cardHover}
-          >
-            <Card className="bg-beige-100 h-full transition-all duration-300 border-2 border-beige-200">
-              <CardHeader>
-                <CardTitle className="flex items-center text-beige-700">
-                  <MessageCircle className="mr-2 h-5 w-5" />
-                  Text Therapy
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="flex flex-col h-full">
-                <p className="text-beige-600 mb-6 flex-grow">
-                  Type your thoughts and feelings in a private chat with our AI therapist
-                  that provides thoughtful, empathetic responses to your messages.
-                </p>
-                <Link href="/text" className="block">
-                  <Button className="w-full bg-beige-500 hover:bg-beige-600 text-white transition-all duration-300 transform hover:translate-y-[-2px]">
-                    <motion.span
-                      whileHover={{ scale: 1.05 }}
-                      className="flex items-center justify-center"
-                    >
-                      <MessageCircle className="mr-2 h-4 w-4" />
-                      Start Text Session
-                    </motion.span>
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </motion.div>
-        
-        <motion.div 
+        <motion.div
           variants={item}
-          className="md:col-span-2"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2, duration: 0.8 }}
+          className="space-y-6"
         >
+          {/* Mental Health Education Card */}
           <motion.div
             whileHover="hover"
             initial="rest"
@@ -292,157 +327,114 @@ export default function HomePage() {
           >
             <Card className="bg-beige-100 transition-all duration-300 border-2 border-beige-200">
               <CardHeader>
-                <CardTitle className="flex items-center text-beige-700">
-                  <BarChart className="mr-2 h-5 w-5" />
-                  Emotion Statistics
+                <CardTitle className="flex items-center justify-between text-beige-700">
+                  <div className="flex items-center">
+                    <BookOpen className="mr-2 h-5 w-5" />
+                    Mental Health Education
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    onClick={() => setShowEducationModule(!showEducationModule)}
+                    className="text-beige-600 hover:text-beige-800"
+                  >
+                    {showEducationModule ? "Hide Modules" : "Show Modules"}
+                    {showEducationModule ? 
+                      <ChevronDown className="ml-2 h-4 w-4" /> : 
+                      <ChevronRight className="ml-2 h-4 w-4" />
+                    }
+                  </Button>
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-beige-600 mb-6">
-                  Track your emotional patterns over time with our statistics dashboard.
-                  See how your mood changes throughout your therapy sessions.
+                <p className="text-beige-600 mb-4">
+                  Learn about emotions, coping strategies, and mindfulness techniques to enhance your mental well-being.
                 </p>
-                <Link href="/stats" className="block">
-                  <Button className="w-full bg-beige-500 hover:bg-beige-600 text-white transition-all duration-300 transform hover:translate-y-[-2px]">
-                    <motion.span
-                      whileHover={{ scale: 1.05 }}
-                      className="flex items-center justify-center"
+                
+                <AnimatePresence>
+                  {showEducationModule && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden"
                     >
-                      <BarChart className="mr-2 h-4 w-4" />
-                      View Statistics
-                    </motion.span>
-                  </Button>
-                </Link>
+                      <Accordion type="single" collapsible className="mt-4">
+                        {educationModules.map((module) => (
+                          <AccordionItem key={module.id} value={module.id} className="border-beige-200">
+                            <AccordionTrigger className="hover:text-beige-700 text-beige-600 font-medium">
+                              <div className="flex items-start text-left">
+                                <Info className="mr-2 h-5 w-5 flex-shrink-0 mt-0.5" />
+                                <div>
+                                  <div>{module.title}</div>
+                                  <div className="text-sm font-normal text-beige-500">{module.description}</div>
+                                </div>
+                              </div>
+                            </AccordionTrigger>
+                            <AccordionContent className="text-beige-600">
+                              {module.content}
+                            </AccordionContent>
+                          </AccordionItem>
+                        ))}
+                      </Accordion>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </CardContent>
             </Card>
           </motion.div>
-        </motion.div>
-      </motion.div>
-
-      <motion.div
-        variants={item}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.2, duration: 0.8 }}
-        className="space-y-6"
-      >
-        {/* Mental Health Education Card */}
-        <motion.div
-          whileHover="hover"
-          initial="rest"
-          animate="rest"
-          variants={cardHover}
-        >
-          <Card className="bg-beige-100 transition-all duration-300 border-2 border-beige-200">
+          
+          {/* Mental Health Tips Carousel */}
+          <motion.div
+            whileHover="hover"
+            initial="rest"
+            animate="rest"
+            variants={cardHover}
+          >
+            <Card className="bg-primary/5 border-2 border-primary/10 mb-6">
+              <CardContent className="pt-6">
+                <MentalHealthTips />
+              </CardContent>
+            </Card>
+          </motion.div>
+          
+          {/* Why Therapeutic AI Card */}
+          <Card className="bg-beige-50 border-2 border-beige-200">
             <CardHeader>
-              <CardTitle className="flex items-center justify-between text-beige-700">
-                <div className="flex items-center">
-                  <BookOpen className="mr-2 h-5 w-5" />
-                  Mental Health Education
-                </div>
-                <Button 
-                  variant="ghost" 
-                  onClick={() => setShowEducationModule(!showEducationModule)}
-                  className="text-beige-600 hover:text-beige-800"
-                >
-                  {showEducationModule ? "Hide Modules" : "Show Modules"}
-                  {showEducationModule ? 
-                    <ChevronDown className="ml-2 h-4 w-4" /> : 
-                    <ChevronRight className="ml-2 h-4 w-4" />
-                  }
-                </Button>
-              </CardTitle>
+              <CardTitle className="text-beige-700">Why Therapeutic AI?</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-beige-600 mb-4">
-                Learn about emotions, coping strategies, and mindfulness techniques to enhance your mental well-being.
-              </p>
-              
-              <AnimatePresence>
-                {showEducationModule && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="overflow-hidden"
-                  >
-                    <Accordion type="single" collapsible className="mt-4">
-                      {educationModules.map((module) => (
-                        <AccordionItem key={module.id} value={module.id} className="border-beige-200">
-                          <AccordionTrigger className="hover:text-beige-700 text-beige-600 font-medium">
-                            <div className="flex items-start text-left">
-                              <Info className="mr-2 h-5 w-5 flex-shrink-0 mt-0.5" />
-                              <div>
-                                <div>{module.title}</div>
-                                <div className="text-sm font-normal text-beige-500">{module.description}</div>
-                              </div>
-                            </div>
-                          </AccordionTrigger>
-                          <AccordionContent className="text-beige-600">
-                            {module.content}
-                          </AccordionContent>
-                        </AccordionItem>
-                      ))}
-                    </Accordion>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              <motion.ul 
+                className="space-y-4 text-beige-600"
+                variants={container}
+                initial="hidden"
+                animate="show"
+              >
+                <motion.li variants={item} className="flex items-start">
+                  <span className="font-bold mr-2 text-green-500">✓</span>
+                  <span>Private and confidential conversations that stay on your device</span>
+                </motion.li>
+                <motion.li variants={item} className="flex items-start">
+                  <span className="font-bold mr-2 text-green-500">✓</span>
+                  <span>Available 24/7 for emotional support whenever you need it</span>
+                </motion.li>
+                <motion.li variants={item} className="flex items-start">
+                  <span className="font-bold mr-2 text-green-500">✓</span>
+                  <span>No judgment - express yourself freely in a safe environment</span>
+                </motion.li>
+                <motion.li variants={item} className="flex items-start">
+                  <span className="font-bold mr-2 text-green-500">✓</span>
+                  <span>Uses advanced AI to provide meaningful, therapeutic responses</span>
+                </motion.li>
+                <motion.li variants={item} className="flex items-start">
+                  <span className="font-bold mr-2 text-amber-500">⚠️</span>
+                  <span className="text-beige-700 font-medium">This is not a replacement for professional mental health services</span>
+                </motion.li>
+              </motion.ul>
             </CardContent>
           </Card>
         </motion.div>
-        
-        {/* Mental Health Tips Carousel */}
-        <motion.div
-          whileHover="hover"
-          initial="rest"
-          animate="rest"
-          variants={cardHover}
-        >
-          <Card className="bg-primary/5 border-2 border-primary/10 mb-6">
-            <CardContent className="pt-6">
-              <MentalHealthTips />
-            </CardContent>
-          </Card>
-        </motion.div>
-        
-        {/* Why Therapeutic AI Card */}
-        <Card className="bg-beige-50 border-2 border-beige-200">
-          <CardHeader>
-            <CardTitle className="text-beige-700">Why Therapeutic AI?</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <motion.ul 
-              className="space-y-4 text-beige-600"
-              variants={container}
-              initial="hidden"
-              animate="show"
-            >
-              <motion.li variants={item} className="flex items-start">
-                <span className="font-bold mr-2 text-green-500">✓</span>
-                <span>Private and confidential conversations that stay on your device</span>
-              </motion.li>
-              <motion.li variants={item} className="flex items-start">
-                <span className="font-bold mr-2 text-green-500">✓</span>
-                <span>Available 24/7 for emotional support whenever you need it</span>
-              </motion.li>
-              <motion.li variants={item} className="flex items-start">
-                <span className="font-bold mr-2 text-green-500">✓</span>
-                <span>No judgment - express yourself freely in a safe environment</span>
-              </motion.li>
-              <motion.li variants={item} className="flex items-start">
-                <span className="font-bold mr-2 text-green-500">✓</span>
-                <span>Uses advanced AI to provide meaningful, therapeutic responses</span>
-              </motion.li>
-              <motion.li variants={item} className="flex items-start">
-                <span className="font-bold mr-2 text-amber-500">⚠️</span>
-                <span className="text-beige-700 font-medium">This is not a replacement for professional mental health services</span>
-              </motion.li>
-            </motion.ul>
-          </CardContent>
-        </Card>
-      </motion.div>
+      </div>
     </div>
-    </TherapeuticBackground>
   );
 }
