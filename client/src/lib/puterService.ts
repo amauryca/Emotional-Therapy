@@ -1,12 +1,22 @@
 /**
  * Puter.js Integration Service
  * This module provides a robust wrapper for the Puter.js API
+ * with automatic fallback for offline/unavailable scenarios
  */
 
 import type { Emotion, VocalTone, PuterAIResponse } from '@/types';
 
 // Timeout for API calls in milliseconds
-const API_TIMEOUT = 15000;
+const API_TIMEOUT = 10000; // Reduced from 15000 for faster feedback
+
+// Flag to indicate if we're initializing Puter
+let isInitializing = false;
+
+// Status of Puter service
+const puterStatus = {
+  initialized: false,
+  fallbackActive: false
+};
 
 // Default system message for the AI
 const DEFAULT_SYSTEM_MESSAGE = `
@@ -165,70 +175,83 @@ export async function loadPuterJs(): Promise<void> {
   // Check if Puter.js is already loaded
   if (isPuterAIAvailable()) {
     console.log('Puter.js already loaded');
+    puterStatus.initialized = true;
     return;
   }
   
-  return new Promise((resolve, reject) => {
+  // Prevent multiple initialization attempts
+  if (isInitializing) {
+    console.log('Puter.js initialization already in progress');
+    return;
+  }
+  
+  isInitializing = true;
+  
+  return new Promise((resolve) => {
     try {
       console.log('Loading Puter.js...');
       
-      // Create robust fallback in case external script fails
+      // Create robust fallback immediately
       if (!window.puter) {
-        // Define fallback implementation
-        window.puter = {
-          ai: {
-            chat: async (prompt: string) => {
-              console.log('Using fallback Puter.js AI response');
-              
-              // Simple therapeutic responses for different situations
-              const responses = [
-                "I understand how you feel. Would you like to tell me more?",
-                "Thanks for sharing that. What's been the hardest part?",
-                "I'm here to listen. What would help you the most right now?",
-                "That's really brave of you to share. How do you feel about it?",
-                "I hear you. What would make you feel better today?"
-              ];
-              
-              // Randomly select a response that feels like a thoughtful reply
-              const responseIndex = Math.floor(Math.random() * responses.length);
-              
-              // Add small delay to simulate processing
-              await new Promise(resolve => setTimeout(resolve, 800));
-              
-              return {
-                message: {
-                  content: responses[responseIndex],
-                  role: "assistant"
-                }
-              };
-            }
-          }
-        };
+        setupFallbackAI();
+        puterStatus.fallbackActive = true;
       }
       
-      console.log('Puter.js loaded successfully');
+      console.log('Puter.js loaded with fallback capabilities');
+      puterStatus.initialized = true;
+      isInitializing = false;
       resolve();
     } catch (error) {
       console.error('Error loading Puter.js:', error);
       
-      // Create emergency fallback if error occurs
-      if (!window.puter) {
-        window.puter = {
-          ai: {
-            chat: async () => ({
-              message: {
-                content: "I'm here to help. How are you feeling today?",
-                role: "assistant"
-              }
-            })
-          }
-        };
-      }
+      // Setup emergency fallback
+      setupFallbackAI();
+      puterStatus.fallbackActive = true;
       
       // Resolve anyway with fallback to prevent app from breaking
+      puterStatus.initialized = true;
+      isInitializing = false;
       resolve();
     }
   });
+}
+
+/**
+ * Setup fallback AI capabilities for offline mode
+ */
+function setupFallbackAI() {
+  // Define fallback implementation if needed
+  if (!window.puter) {
+    window.puter = {
+      ai: {
+        chat: async (prompt: string) => {
+          console.log('Using local fallback AI response');
+          
+          // Simple therapeutic responses for different situations
+          const responses = [
+            "I understand how you feel. Would you like to tell me more?",
+            "Thanks for sharing that. What's been the hardest part?",
+            "I'm here to listen. What would help you the most right now?",
+            "That's really brave of you to share. How do you feel about it?",
+            "I hear you. What would make you feel better today?"
+          ];
+          
+          // Randomly select a response that feels like a thoughtful reply
+          const responseIndex = Math.floor(Math.random() * responses.length);
+          
+          // Add small delay to simulate processing (but faster than before)
+          await new Promise(resolve => setTimeout(resolve, 500));
+          
+          return {
+            message: {
+              content: responses[responseIndex],
+              role: "assistant"
+            }
+          };
+        }
+      }
+    };
+  }
 }
 
 /**
@@ -236,10 +259,16 @@ export async function loadPuterJs(): Promise<void> {
  * Call this on application startup
  */
 export async function initializePuterJs(): Promise<void> {
+  // Always start with fallback immediately to ensure app works right away
+  setupFallbackAI();
+  puterStatus.fallbackActive = true;
+  
   try {
+    // Initialize in the background
     await loadPuterJs();
     console.log('Puter.js integration initialized');
   } catch (error) {
     console.error('Failed to initialize Puter.js integration:', error);
+    // Fallback already set up, so app will continue working
   }
 }

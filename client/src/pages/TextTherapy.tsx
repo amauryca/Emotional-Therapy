@@ -9,6 +9,8 @@ import { Emotion, SpeechToTextResult } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AgeGroup } from '@/hooks/useLanguageComplexity';
 import { Badge } from "@/components/ui/badge";
+import { AmbientPlayer } from '@/components/audio/AmbientPlayer';
+import { getThemeClasses, textTherapyTheme } from '@/lib/theme';
 
 export default function TextTherapy() {
   const [currentEmotion, setCurrentEmotion] = useState<Emotion>('neutral');
@@ -101,6 +103,9 @@ export default function TextTherapy() {
   
   // Get icon for current emotion
   const getEmotionIcon = () => EMOTION_ICONS[currentEmotion] || '😐';
+  
+  // Get theme classes for consistent styling
+  const theme = getThemeClasses(textTherapyTheme);
 
   return (
     <motion.div 
@@ -110,8 +115,8 @@ export default function TextTherapy() {
       variants={containerVariants}
     >
       <motion.div variants={itemVariants}>
-        <Card className="bg-green-50 border-green-100 shadow-md mb-6 overflow-hidden relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-green-100/30 to-blue-100/20 animate-shimmer"></div>
+        <Card className={`shadow-md mb-6 overflow-hidden relative ${theme.cardBg} ${theme.cardBorder}`}>
+          <div className={`absolute inset-0 bg-gradient-to-r ${theme.gradient} animate-shimmer`}></div>
           
           <CardHeader className="flex flex-row items-center justify-between pb-2 relative z-10">
             <motion.div 
@@ -121,15 +126,15 @@ export default function TextTherapy() {
               transition={{ delay: 0.3, type: "spring" }}
             >
               <motion.div 
-                className="text-green-600 text-2xl animate-float"
+                className={`text-2xl animate-float ${theme.textPrimary}`}
                 animate={{ scale: [1, 1.05, 1] }}
                 transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
               >
                 💬
               </motion.div>
               <div className="flex flex-col">
-                <CardTitle className="text-green-700">AI Text Therapist</CardTitle>
-                <Badge variant="secondary" className="mt-1 bg-green-100 text-green-800 hover:bg-green-200">
+                <CardTitle className={theme.textPrimary}>AI Text Therapist</CardTitle>
+                <Badge variant="secondary" className={`mt-1 ${theme.badgePrimary}`}>
                   <span className="mr-1">{getEmotionIcon()}</span>
                   {currentEmotion.charAt(0).toUpperCase() + currentEmotion.slice(1)}
                 </Badge>
@@ -141,7 +146,13 @@ export default function TextTherapy() {
               initial={{ x: 20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.4, type: "spring" }}
+              className="flex items-center gap-3"
             >
+              {/* Ambient Sound Player */}
+              <div className="flex items-center">
+                <AmbientPlayer isCompact={true} />
+              </div>
+              
               <AgeGroupSelector
                 currentAgeGroup={ageGroup}
                 onAgeGroupChange={handleAgeGroupChange}
@@ -157,7 +168,7 @@ export default function TextTherapy() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.5 }}
             >
-              <p className="text-green-700">
+              <p className={theme.textPrimary}>
                 Chat with the AI therapist by typing your thoughts and feelings below.
                 The conversation adapts to your chosen age group and detects emotional tones from your messages.
               </p>
@@ -171,10 +182,10 @@ export default function TextTherapy() {
               transition={{ delay: 0.6 }}
             >
               <motion.div 
-                className="flex items-center gap-1.5 bg-green-100 rounded-full px-3 py-1.5"
+                className={`flex items-center gap-1.5 ${theme.badgePrimary} rounded-full px-3 py-1.5`}
                 whileHover={{ scale: 1.05 }}
               >
-                <span className="text-green-800 font-medium">Detected Emotion:</span>
+                <span className={`${theme.textPrimary} font-medium`}>Detected Emotion:</span>
                 <span className="flex items-center gap-1">
                   <motion.span 
                     className="text-lg animate-pulse"
@@ -186,8 +197,8 @@ export default function TextTherapy() {
                   >
                     {getEmotionIcon()}
                   </motion.span>
-                  <span className="capitalize text-green-900">{currentEmotion}</span>
-                  <span className="text-xs text-green-500">({Math.round(emotionConfidence * 100)}%)</span>
+                  <span className={`capitalize ${theme.textPrimary}`}>{currentEmotion}</span>
+                  <span className={`text-xs ${theme.textSecondary}`}>({Math.round(emotionConfidence * 100)}%)</span>
                 </span>
               </motion.div>
             </motion.div>
@@ -208,14 +219,14 @@ export default function TextTherapy() {
             <AnimatePresence>
               {isProcessing && (
                 <motion.div 
-                  className="mt-3 text-sm text-green-500 italic bg-green-50 p-2 rounded-md border border-green-100"
+                  className={`mt-3 text-sm ${theme.textSecondary} italic ${theme.cardBg} p-2 rounded-md ${theme.cardBorder}`}
                   initial={{ opacity: 0, y: 5 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -5 }}
                   transition={{ duration: 0.3 }}
                 >
                   <span className="inline-block mr-2 animate-spin">⏳</span>
-                  The AI is analyzing your <span className="font-medium text-green-700 capitalize">{currentEmotion}</span> emotional tone 
+                  The AI is analyzing your <span className={`font-medium ${theme.textPrimary} capitalize`}>{currentEmotion}</span> emotional tone 
                   to provide a more personalized response...
                 </motion.div>
               )}
