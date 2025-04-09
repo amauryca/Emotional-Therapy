@@ -75,12 +75,13 @@ export function useFaceDetection({
     
     try {
       setError(null);
-      // Request camera with specific constraints for better face detection
+      // Request camera with adaptive constraints for better face detection on any device
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
-          width: { ideal: 640 },
-          height: { ideal: 480 },
+          width: { min: 320, ideal: 640, max: 1280 },
+          height: { min: 240, ideal: 480, max: 720 },
           facingMode: 'user',
+          aspectRatio: { ideal: 1.33333 }, // 4:3 aspect ratio for better face detection
         },
         audio: false
       });

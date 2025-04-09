@@ -17,8 +17,9 @@ export interface ThemeColors {
   info: string;       // Information/help actions
 }
 
-// Core theme palette for the standard color schemes
+// Core theme palette with therapeutic color schemes
 export const themeColors: Record<ColorScheme, ThemeColors> = {
+  // Calming blue theme - promotes tranquility and peace
   blue: {
     primary: 'blue',
     secondary: 'sky',
@@ -28,6 +29,7 @@ export const themeColors: Record<ColorScheme, ThemeColors> = {
     danger: 'rose',
     info: 'cyan',
   },
+  // Soothing indigo theme - encourages introspection and calm confidence
   indigo: {
     primary: 'indigo',
     secondary: 'violet',
@@ -37,6 +39,7 @@ export const themeColors: Record<ColorScheme, ThemeColors> = {
     danger: 'rose',
     info: 'blue',
   },
+  // Grounding teal theme - balances emotions and promotes healing
   teal: {
     primary: 'teal',
     secondary: 'emerald',
@@ -46,15 +49,17 @@ export const themeColors: Record<ColorScheme, ThemeColors> = {
     danger: 'red',
     info: 'sky',
   },
+  // Gentle purple theme - for wisdom, creativity and spiritual awareness
   purple: {
     primary: 'purple',
-    secondary: 'fuchsia',
+    secondary: 'violet',
     neutral: 'zinc',
     success: 'emerald',
     warning: 'amber',
     danger: 'rose',
     info: 'indigo',
   },
+  // Warm amber theme - for comfort, optimism and mental clarity
   amber: {
     primary: 'amber', 
     secondary: 'orange',
